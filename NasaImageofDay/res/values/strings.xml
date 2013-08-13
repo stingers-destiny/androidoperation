@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">NasaImageofDay</string>
+    <string name="app_name">Nasa Image of the Day</string>
     <string name="action_settings">Settings</string>
-    <string name="image_title">Decorating the Sky</string>
-    <string name="image_date">Mon, 27 Dec 2010 00:00 EST</string>
-    <string name="image_description">This mosaic will rock your world\n\n/n/nffds/n/nssdsd/nn/nn</string>
-    
+    <string name="dialog_no_internet_connection">No internet found</string>
+    <string name="ok">Ok</string>
 </resources>
