@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/*
+ * @ author : ammar
+ */
 public class NasaImageOfDayMainActivity extends FragmentActivity {
 	private static final String URL = "http://www.nasa.gov/rss/image_of_the_day.rss";
 
