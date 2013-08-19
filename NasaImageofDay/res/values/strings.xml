@@ -7,4 +7,5 @@
     <string name="ok">Ok</string>
     <string name="showMoreDescription">show more</string>
     <string name="showLessDescription">show less</string>
+    <string name="refreshButtonText">Refresh</string>
 </resources>
