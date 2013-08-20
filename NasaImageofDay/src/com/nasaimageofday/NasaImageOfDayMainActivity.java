@@ -165,6 +165,7 @@ public class NasaImageOfDayMainActivity extends FragmentActivity {
 		private void resetViewValues(final String title, final String date,
 				final Bitmap image, StringBuffer description) {
 			fullDescription = description;
+			setImage(image);
 			description = getSmallerDescription(description);
 			((TextView) findViewById(R.id.title)).setText(title);
 			((TextView) findViewById(R.id.publishDate)).setText(date);
