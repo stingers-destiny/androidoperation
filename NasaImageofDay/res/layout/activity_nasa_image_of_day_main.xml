@@ -39,6 +39,12 @@
                 android:id="@+id/imageDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/imageDescriptionMoreOrLess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:onClick="showMoreOrLessText"/>
         </LinearLayout>
     </ScrollView>
 
@@ -53,9 +59,15 @@
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:onClick="refreshActivity"
             android:text="@string/refreshButtonText" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="setWallpaper"
+            android:text="@string/setWallpaperText" />
     </LinearLayout>
 
 </LinearLayout>
