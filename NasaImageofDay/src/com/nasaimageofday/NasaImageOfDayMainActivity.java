@@ -95,7 +95,7 @@ public class NasaImageOfDayMainActivity extends FragmentActivity {
 	private StringBuffer getSmallerDescription(StringBuffer description) {
 		if (showLess) {
 			description = new StringBuffer(
-					(description == null || description.length() < 20) ? description
+					(description == null || description.length() < 21) ? description
 							: description.substring(0, 20));
 		}
 		return description;
