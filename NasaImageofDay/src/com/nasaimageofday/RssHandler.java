@@ -102,12 +102,9 @@ public class RssHandler extends DefaultHandler {
 		if (inTitle && title == null) {
 			title = chars;
 		}
-		if (inDescription) {
+		if (inDescription && description.length() == 0) {
 			description = description.append(chars);
-		}
-		// if(inImageUrl && image == null){
-		// image = getBitmap(chars);
-		// }
+		}		
 		if (inDate && date == null) {
 			date = chars;
 		}
