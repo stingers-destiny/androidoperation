@@ -7,18 +7,12 @@ import android.app.ProgressDialog;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.StyleSpan;
-import android.text.style.URLSpan;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +33,7 @@ public class NasaImageOfDayMainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_nasa_image_of_day_main);
-		setTextForButton("Show More", fullDescription);
+		setTextForButton(R.string.showLessDescription, fullDescription);
 		setVisibilityForShowMoreButton(View.INVISIBLE);
 		refresh();
 	}
@@ -79,14 +73,14 @@ public class NasaImageOfDayMainActivity extends FragmentActivity {
 	public void showMoreOrLessText(View view) {
 		showLess = !showLess;
 		if (showLess) {
-			setTextForButton("Show More",
+			setTextForButton(R.string.showMoreDescription,
 					getSmallerDescription(fullDescription));
 		} else {
-			setTextForButton("Show Less", fullDescription);
+			setTextForButton(R.string.showLessDescription, fullDescription);
 		}
 	}
 
-	private void setTextForButton(String text, StringBuffer imageDescription) {
+	private void setTextForButton(int text, StringBuffer imageDescription) {
 		((Button) findViewById(R.id.imageDescriptionMoreOrLess)).setText(text);
 		((TextView) findViewById(R.id.imageDescription))
 				.setText(imageDescription);
