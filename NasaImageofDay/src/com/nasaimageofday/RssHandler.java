@@ -79,7 +79,10 @@ public class RssHandler extends DefaultHandler {
 
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
-		if (localName.startsWith("item")) {
+		if (title != null && description.length() > 0 && image != null
+				&& date != null) {
+			throw new SAXException("Item already downloaded");
+		} else if (localName.startsWith("item")) {
 			inItem = true;
 		} else if (inItem) {
 			inTitle = localName.equals("title");
@@ -87,11 +90,7 @@ public class RssHandler extends DefaultHandler {
 			inDate = localName.equals("pubDate");
 			inImageUrl = localName.equals("enclosure");
 			if (inImageUrl && image == null) {
-				for (int i = 0; i < attributes.getLength(); i++) {
-					if (attributes.getQName(i).equals("url")) {
-						image = getBitmap(attributes.getValue(i));
-					}
-				}
+				image = getBitmap(attributes.getValue("url"));
 			}
 		}
 	}
@@ -104,7 +103,7 @@ public class RssHandler extends DefaultHandler {
 		}
 		if (inDescription && description.length() == 0) {
 			description = description.append(chars);
-		}		
+		}
 		if (inDate && date == null) {
 			date = chars;
 		}
