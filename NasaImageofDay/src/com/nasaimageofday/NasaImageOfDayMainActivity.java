@@ -26,16 +26,56 @@ import android.widget.Toast;
 public class NasaImageOfDayMainActivity extends FragmentActivity {
 	private static final String URL = "http://www.nasa.gov/rss/image_of_the_day.rss";
 	private Bitmap image;
-	private boolean showLess = true;
+	private String title;
+	private String pubDate;
 	private StringBuffer fullDescription = new StringBuffer();
+	private boolean showLess = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_nasa_image_of_day_main);
-		setTextForButton(R.string.showLessDescription, fullDescription);
-		setVisibilityForShowMoreButton(View.INVISIBLE);
+		ImageOfDayDetails details = (ImageOfDayDetails) getLastCustomNonConfigurationInstance();
+		if (details == null) {
+			setVisibilityAndTextForShowButton(View.INVISIBLE,
+					R.string.showMoreDescription);
+			refresh();
+		} else {
+			showLess = details.isShowLess();
+			resetViewValues(details.getTitle(), details.getPubDate(),
+					details.getImage(), details.getFullDescription());
+			setVisibilityAndTextForShowButton(details.getShowMoreButton(),
+					showLess ? R.string.showMoreDescription
+							: R.string.showLessDescription);
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.nasa_image_of_day_main, menu);
+		return true;
+	}
+
+	@Override
+	public Object onRetainCustomNonConfigurationInstance() {
+		return new ImageOfDayDetails(image, title, fullDescription, pubDate,
+				showLess, getVisibilityForShowMoreButton());
+	}
+
+	public void showMoreOrLessText(View view) {
+		showLess = !showLess;
+		setTextForButton(showLess ? R.string.showMoreDescription
+				: R.string.showLessDescription);
+		setImageDescription(showLess ? getSmallerDescription(fullDescription)
+				: fullDescription);
+	}
+
+	public void refreshActivity(View view) {
 		refresh();
+	}
+
+	public void setWallpaper(View view) {
+		new UpdateWallpaperAsyncTask().execute();
 	}
 
 	private void refresh() {
@@ -47,52 +87,38 @@ public class NasaImageOfDayMainActivity extends FragmentActivity {
 		}
 	}
 
-	public void refreshActivity(View view) {
-		refresh();
-	}
-
-	public void setWallpaper(View view) {
-		new UpdateWallpaperAsyncTask().execute();
-	}
-
-	public void setImage(Bitmap image) {
-		this.image = image;
-	}
-
 	private boolean isInternetAvailable() {
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		return networkInfo != null && networkInfo.isConnected();
 	}
 
-	private void setVisibilityForShowMoreButton(int visibility) {
+	private void setVisibilityAndTextForShowButton(int visibility,
+			int buttonText) {
+		setTextForButton(buttonText);
 		((Button) findViewById(R.id.imageDescriptionMoreOrLess))
 				.setVisibility(visibility);
 	}
 
-	public void showMoreOrLessText(View view) {
-		showLess = !showLess;
-		if (showLess) {
-			setTextForButton(R.string.showMoreDescription,
-					getSmallerDescription(fullDescription));
-		} else {
-			setTextForButton(R.string.showLessDescription, fullDescription);
-		}
+	private int getVisibilityForShowMoreButton() {
+		return ((Button) findViewById(R.id.imageDescriptionMoreOrLess))
+				.getVisibility();
 	}
 
-	private void setTextForButton(int text, StringBuffer imageDescription) {
+	private void setTextForButton(int text) {
 		((Button) findViewById(R.id.imageDescriptionMoreOrLess)).setText(text);
+	}
+
+	private void setImageDescription(StringBuffer imageDescription) {
 		((TextView) findViewById(R.id.imageDescription))
 				.setText(imageDescription);
 	}
 
 	private StringBuffer getSmallerDescription(StringBuffer description) {
-		if (showLess) {
-			description = new StringBuffer(
-					(description == null || description.length() < 21) ? description
-							: description.substring(0, 20));
-		}
-		return description;
+		return showLess ? new StringBuffer(
+				(description == null || description.length() < 21) ? description
+						: description.substring(0, 20))
+				: description;
 	}
 
 	private class UpdateWallpaperAsyncTask extends
@@ -115,12 +141,6 @@ public class NasaImageOfDayMainActivity extends FragmentActivity {
 			Toast.makeText(getApplicationContext(), "Wallpaper set",
 					Toast.LENGTH_SHORT).show();
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.nasa_image_of_day_main, menu);
-		return true;
 	}
 
 	private class UpdateRssAsyncTask extends
@@ -155,18 +175,21 @@ public class NasaImageOfDayMainActivity extends FragmentActivity {
 			publishProgress(100, 100);
 			progressDialog.dismiss();
 		}
+	}
 
-		private void resetViewValues(final String title, final String date,
-				final Bitmap image, StringBuffer description) {
-			fullDescription = description;
-			setImage(image);
-			description = getSmallerDescription(description);
-			((TextView) findViewById(R.id.title)).setText(title);
-			((TextView) findViewById(R.id.publishDate)).setText(date);
-			((ImageView) findViewById(R.id.imageDisplay)).setImageBitmap(image);
-			((TextView) findViewById(R.id.imageDescription))
-					.setText(description);
-			setVisibilityForShowMoreButton(View.VISIBLE);
-		}
+	private void resetViewValues(final String title, final String date,
+			final Bitmap image, StringBuffer description) {
+		fullDescription = description;
+		this.image = image;
+		this.title = title;
+		this.pubDate = date;
+
+		description = getSmallerDescription(description);
+		((TextView) findViewById(R.id.title)).setText(title);
+		((TextView) findViewById(R.id.publishDate)).setText(date);
+		((ImageView) findViewById(R.id.imageDisplay)).setImageBitmap(image);
+		((TextView) findViewById(R.id.imageDescription)).setText(description);
+		setVisibilityAndTextForShowButton(View.VISIBLE,
+				R.string.showMoreDescription);
 	}
 }
