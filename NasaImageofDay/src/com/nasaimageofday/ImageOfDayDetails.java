@@ -2,7 +2,7 @@ package com.nasaimageofday;
 
 import android.graphics.Bitmap;
 
-public class ImageOfDayDetails {
+public final class ImageOfDayDetails {
 	private Bitmap image;
 	private String title;
 	private StringBuffer fullDescription;
